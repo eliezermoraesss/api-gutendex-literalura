@@ -35,13 +35,14 @@ public class Principal {
 
                     ConverteDados conversor = new ConverteDados();
                     DadosResultado resultado = conversor.obterDados(json, DadosResultado.class);
+                    DadosLivro livro = resultado.results().getFirst();
+
                     System.out.println("----- LIVRO -----");
-                    for (DadosLivro livro : resultado.results()) {
-                        System.out.println("Título: " + livro.titulo());
-                        System.out.println("Autor: " + livro.autores().getFirst().nome());
-                        System.out.println("Idioma: " + livro.idiomas().getFirst());
-                        System.out.println("Número de dowloads: " + livro.numeroDeDownloads());
-                    }
+                    System.out.println("Título: " + livro.titulo());
+                    System.out.println("Autor: " + livro.autores().getFirst().nome());
+                    System.out.println("Idioma: " + livro.idiomas().getFirst());
+                    System.out.println("Número de dowloads: " + livro.numeroDeDownloads());
+
                     System.out.println("-----------------");
                     System.out.println();
                     break;
