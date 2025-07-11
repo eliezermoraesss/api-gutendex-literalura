@@ -1,7 +1,11 @@
 package br.com.eliezer.literalura.principal;
 
+import br.com.eliezer.literalura.model.Autor;
 import br.com.eliezer.literalura.model.DadosLivro;
 import br.com.eliezer.literalura.model.DadosResultado;
+import br.com.eliezer.literalura.model.Livro;
+import br.com.eliezer.literalura.repository.AutorRepository;
+import br.com.eliezer.literalura.repository.LivroRepository;
 import br.com.eliezer.literalura.service.ConsumoApi;
 import br.com.eliezer.literalura.service.ConverteDados;
 
@@ -12,6 +16,13 @@ public class Principal {
     private ConsumoApi consumoApi = new ConsumoApi();
     private ConverteDados conversor = new ConverteDados();
     private Scanner scan = new Scanner(System.in);
+    private LivroRepository livroRepository;
+    private AutorRepository autorRepository;
+
+    public Principal(LivroRepository livroRepository, AutorRepository autorRepository) {
+        this.livroRepository = livroRepository;
+        this.autorRepository = autorRepository;
+    }
 
     public void exibeMenu() {
         String opcao = "";
@@ -57,14 +68,22 @@ public class Principal {
     }
 
     private void buscarLivroApi() {
-        DadosLivro livro = getDadosLivro();
+        DadosLivro dados = getDadosLivro();
+
+        if (dados == null) {
+            System.out.println("Nenhum livro encontrado.");
+            return;
+        }
         System.out.println("----- LIVRO -----");
-        System.out.println("Título: " + livro.titulo());
-        System.out.println("Autor: " + livro.autores().getFirst().nome());
-        System.out.println("Idioma: " + livro.idiomas().getFirst());
-        System.out.println("Número de dowloads: " + livro.numeroDeDownloads());
+        System.out.println("Título: " + dados.titulo());
+        System.out.println("Autor: " + dados.autores().getFirst().nome());
+        System.out.println("Idioma: " + dados.idiomas().getFirst());
+        System.out.println("Número de dowloads: " + dados.numeroDeDownloads());
         System.out.println("-----------------");
         System.out.println();
+        Livro livro = new Livro(dados);
+        autorRepository.save(livro.getAutor());
+        livroRepository.save(livro);
     }
 
     private DadosLivro getDadosLivro() {
@@ -72,7 +91,11 @@ public class Principal {
         String titulo = scan.nextLine();
         var json = consumoApi.obterDados(ENDERECO + "?search=" + titulo.toLowerCase().replace(" ", "+"));
         DadosResultado resultado = conversor.obterDados(json, DadosResultado.class);
-        DadosLivro livro = resultado.results().getFirst();
-        return livro;
+
+        if (resultado.results().isEmpty()) {
+            return null;
+        }
+
+        return resultado.results().getFirst();
     }
 }

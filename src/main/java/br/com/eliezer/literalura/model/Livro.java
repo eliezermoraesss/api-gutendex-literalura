@@ -20,6 +20,15 @@ public class Livro {
     private String idioma;
     private Integer numeroDeDownloads;
 
+    public Livro(DadosLivro dados) {
+        this.titulo = dados.titulo();
+        this.idioma = dados.idiomas().isEmpty() ? null : dados.idiomas().get(0);
+        this.numeroDeDownloads = dados.numeroDeDownloads();
+        if (dados.autores() != null && !dados.autores().isEmpty()) {
+            this.autor = new Autor(dados.autores().getFirst());
+        }
+    }
+
     public Autor getAutor() {
         return autor;
     }
