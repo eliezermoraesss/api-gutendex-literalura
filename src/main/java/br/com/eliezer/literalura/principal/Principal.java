@@ -43,8 +43,7 @@ public class Principal {
                     buscarLivroApi();
                     break;
                 case "2":
-                    System.out.println("Opção 2 selecionada: listar livros registrados");
-                    // Implementar lógica para listar livros registrados
+                    listarLivrosRegistrados();
                     break;
                 case "3":
                     System.out.println("Opção 3 selecionada: listar autores registrados");
@@ -67,6 +66,15 @@ public class Principal {
         }
     }
 
+    private void listarLivrosRegistrados() {
+        livroRepository.findAll().forEach(livro -> {
+            System.out.println("Título: " + livro.getTitulo());
+            System.out.println("Autor: " + livro.getAutor().getNome());
+            System.out.println("Idioma: " + livro.getIdioma());
+            System.out.println("Número de downloads: " + livro.getNumeroDeDownloads());
+            System.out.println("-----------------");
+        });
+    }
     private void buscarLivroApi() {
         DadosLivro dados = getDadosLivro();
 
