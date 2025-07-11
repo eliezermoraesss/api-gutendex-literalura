@@ -46,8 +46,7 @@ public class Principal {
                     listarLivrosRegistrados();
                     break;
                 case "3":
-                    System.out.println("Opção 3 selecionada: listar autores registrados");
-                    // Implementar lógica para listar autores registrados
+                    listarAutoresRegistrados();
                     break;
                 case "4":
                     System.out.println("Opção 4 selecionada: listar autores vivos em um determinado ano");
@@ -75,6 +74,17 @@ public class Principal {
             System.out.println("-----------------");
         });
     }
+
+    private void listarAutoresRegistrados() {
+        autorRepository.findAll().forEach(autor -> {
+            System.out.println("Nome: " + autor.getNome());
+            System.out.println("Ano de nascimento: " + autor.getAnoDeNascimento());
+            System.out.println("Ano de falecimento: " + autor.getAnoDeFalecimento());
+            System.out.println("Livros registrados: [" + autor.getLivros().getFirst().getTitulo() + "]");
+            System.out.println("-----------------");
+        });
+    }
+
     private void buscarLivroApi() {
         DadosLivro dados = getDadosLivro();
 
