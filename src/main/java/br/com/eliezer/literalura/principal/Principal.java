@@ -9,6 +9,8 @@ import java.util.Scanner;
 
 public class Principal {
     private static final String ENDERECO = "https://gutendex.com/books/";
+    private ConsumoApi consumoApi = new ConsumoApi();
+    private ConverteDados conversor = new ConverteDados();
     private Scanner scan = new Scanner(System.in);
 
     public void exibeMenu() {
@@ -27,24 +29,7 @@ public class Principal {
 
             switch (opcao) {
                 case "1":
-                    System.out.println("Insira o nome do livro que você deseja procurar: ");
-                    String titulo = scan.nextLine();
-
-                    var consumoApi = new ConsumoApi();
-                    var json = consumoApi.obterDados(ENDERECO + "?search=" + titulo.toLowerCase().replace(" ", "+"));
-
-                    ConverteDados conversor = new ConverteDados();
-                    DadosResultado resultado = conversor.obterDados(json, DadosResultado.class);
-                    DadosLivro livro = resultado.results().getFirst();
-
-                    System.out.println("----- LIVRO -----");
-                    System.out.println("Título: " + livro.titulo());
-                    System.out.println("Autor: " + livro.autores().getFirst().nome());
-                    System.out.println("Idioma: " + livro.idiomas().getFirst());
-                    System.out.println("Número de dowloads: " + livro.numeroDeDownloads());
-
-                    System.out.println("-----------------");
-                    System.out.println();
+                    buscarLivroApi();
                     break;
                 case "2":
                     System.out.println("Opção 2 selecionada: listar livros registrados");
@@ -69,5 +54,25 @@ public class Principal {
                     System.out.println("Opção inválida. Tente novamente.");
             }
         }
+    }
+
+    private void buscarLivroApi() {
+        DadosLivro livro = getDadosLivro();
+        System.out.println("----- LIVRO -----");
+        System.out.println("Título: " + livro.titulo());
+        System.out.println("Autor: " + livro.autores().getFirst().nome());
+        System.out.println("Idioma: " + livro.idiomas().getFirst());
+        System.out.println("Número de dowloads: " + livro.numeroDeDownloads());
+        System.out.println("-----------------");
+        System.out.println();
+    }
+
+    private DadosLivro getDadosLivro() {
+        System.out.println("Insira o nome do livro que você deseja procurar: ");
+        String titulo = scan.nextLine();
+        var json = consumoApi.obterDados(ENDERECO + "?search=" + titulo.toLowerCase().replace(" ", "+"));
+        DadosResultado resultado = conversor.obterDados(json, DadosResultado.class);
+        DadosLivro livro = resultado.results().getFirst();
+        return livro;
     }
 }
