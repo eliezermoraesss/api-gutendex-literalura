@@ -49,8 +49,7 @@ public class Principal {
                     listarAutoresRegistrados();
                     break;
                 case "4":
-                    System.out.println("Opção 4 selecionada: listar autores vivos em um determinado ano");
-                    // Implementar lógica para listar autores vivos em um determinado ano
+                    listarAutoresVivosPorAno();
                     break;
                 case "5":
                     System.out.println("Opção 5 selecionada: listar livros em um determinado idioma");
@@ -67,21 +66,38 @@ public class Principal {
 
     private void listarLivrosRegistrados() {
         livroRepository.findAll().forEach(livro -> {
+            System.out.println();
             System.out.println("Título: " + livro.getTitulo());
             System.out.println("Autor: " + livro.getAutor().getNome());
             System.out.println("Idioma: " + livro.getIdioma());
             System.out.println("Número de downloads: " + livro.getNumeroDeDownloads());
             System.out.println("-----------------");
+            System.out.println();
         });
     }
 
     private void listarAutoresRegistrados() {
         autorRepository.findAll().forEach(autor -> {
+            System.out.println();
             System.out.println("Nome: " + autor.getNome());
             System.out.println("Ano de nascimento: " + autor.getAnoDeNascimento());
             System.out.println("Ano de falecimento: " + autor.getAnoDeFalecimento());
-            System.out.println("Livros registrados: [" + autor.getLivros().getFirst().getTitulo() + "]");
+            System.out.println("Livros: [" + autor.getLivros().getFirst().getTitulo() + "]");
             System.out.println("-----------------");
+            System.out.println();
+        });
+    }
+
+    private void listarAutoresVivosPorAno() {
+        System.out.println("Insira o ano que deseja pesquisar: ");
+        Integer ano = Integer.parseInt(scan.nextLine());
+        autorRepository.consultarAutoresVivosPorAno(ano).forEach(autor -> {
+            System.out.println();
+            System.out.println("Nome: " + autor.getNome());
+            System.out.println("Ano de nascimento: " + autor.getAnoDeNascimento());
+            System.out.println("Ano de falecimento: " + (autor.getAnoDeFalecimento() != null ? autor.getAnoDeFalecimento() : "Ainda vivo"));
+            System.out.println("-----------------");
+            System.out.println();
         });
     }
 
@@ -100,8 +116,11 @@ public class Principal {
         System.out.println("-----------------");
         System.out.println();
         Livro livro = new Livro(dados);
-        autorRepository.save(livro.getAutor());
-        livroRepository.save(livro);
+
+        if (livroRepository.findByTitulo(livro.getTitulo()).isEmpty()) {
+            autorRepository.save(livro.getAutor());
+            livroRepository.save(livro);
+        }
     }
 
     private DadosLivro getDadosLivro() {
