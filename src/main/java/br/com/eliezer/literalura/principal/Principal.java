@@ -52,8 +52,7 @@ public class Principal {
                     listarAutoresVivosPorAno();
                     break;
                 case "5":
-                    System.out.println("Opção 5 selecionada: listar livros em um determinado idioma");
-                    // Implementar lógica para listar livros em um determinado idioma
+                    listarLivrosPorIdioma();
                     break;
                 case "0":
                     System.out.println("Saindo...");
@@ -101,6 +100,30 @@ public class Principal {
         });
     }
 
+    private void listarLivrosPorIdioma() {
+        System.out.println("Insira o idioma para realizar a busca: ");
+        System.out.println("es - Espanhol");
+        System.out.println("en - Inglês");
+        System.out.println("fr - Francês");
+        System.out.println("pt - Português");
+        String idioma = scan.nextLine();
+
+        var livros = livroRepository.findByIdioma(idioma);
+        if (livros.isEmpty()) {
+            System.out.println("Não existem livros neste idioma no banco de dados.");
+        } else {
+            livroRepository.findByIdioma(idioma).forEach(livro -> {
+                System.out.println();
+                System.out.println("Título: " + livro.getTitulo());
+                System.out.println("Autor: " + livro.getAutor().getNome());
+                System.out.println("Idioma: " + livro.getIdioma());
+                System.out.println("Número de downloads: " + livro.getNumeroDeDownloads());
+                System.out.println("-----------------");
+                System.out.println();
+            });
+        }
+    }
+
     private void buscarLivroApi() {
         DadosLivro dados = getDadosLivro();
 
@@ -136,3 +159,4 @@ public class Principal {
         return resultado.results().getFirst();
     }
 }
+

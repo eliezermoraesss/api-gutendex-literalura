@@ -20,6 +20,9 @@ public class Livro {
     private String idioma;
     private Integer numeroDeDownloads;
 
+    public Livro() {
+    }
+
     public Livro(DadosLivro dados) {
         this.titulo = dados.titulo();
         this.idioma = dados.idiomas().isEmpty() ? null : dados.idiomas().get(0);
@@ -35,9 +38,6 @@ public class Livro {
 
     public void setAutor(Autor autor) {
         this.autor = autor;
-    }
-
-    public Livro() {
     }
 
     public Livro(String titulo, Autor autor, String idioma, Integer numeroDeDownloads) {
