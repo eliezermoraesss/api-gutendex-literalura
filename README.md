@@ -162,4 +162,4 @@ GRANT ALL PRIVILEGES ON DATABASE literalura TO admin;
 
 ## 🧑‍💻 Autor
 
-Desenvolvido com 💙 por [Eliezer Moraes](https://www.linkedin.com/in/eliezer-moraes-silva-80b68010b/)
+Desenvolvido com 💙 por [Eliezer Moraes Silva](https://www.linkedin.com/in/eliezer-moraes-silva-80b68010b/)
