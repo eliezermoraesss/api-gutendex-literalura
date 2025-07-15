@@ -131,9 +131,15 @@ public class Principal {
             System.out.println("Nenhum livro encontrado.");
             return;
         }
+        String autor = "";
+        autor = dados.autores().stream()
+                .findFirst()
+                .map(a -> a.nome())
+                .orElse("[]");
+
         System.out.println("----- LIVRO -----");
         System.out.println("Título: " + dados.titulo());
-        System.out.println("Autor: " + dados.autores().getFirst().nome());
+        System.out.println("Autor: " + autor);
         System.out.println("Idioma: " + dados.idiomas().getFirst());
         System.out.println("Número de dowloads: " + dados.numeroDeDownloads());
         System.out.println("-----------------");
@@ -141,6 +147,9 @@ public class Principal {
         Livro livro = new Livro(dados);
 
         if (livroRepository.findByTitulo(livro.getTitulo()).isEmpty()) {
+            if (livro.getAutor() == null) {
+                livro.setAutor(new Autor());
+            }
             autorRepository.save(livro.getAutor());
             livroRepository.save(livro);
         }
